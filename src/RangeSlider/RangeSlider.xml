@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<widget id="RangeSlider.widget.RangeSlider" needsEntityContext="true" xmlns="http://www.mendix.com/widget/1.0/">
+  <name>RangeSlider</name>
+  <description>A Range Slider input control for Mendix.</description>
+
+  <icon></icon>
+
+  <properties>
+        <property key="valueAttr" type="attribute">
+            <caption>Value Attribute</caption>
+            <category>Data Source</category>
+            <description>The selected value on the range.</description>
+            <attributeTypes>
+                <attributeType name="Integer"/>
+                <attributeType name="Long"/>
+            </attributeTypes>
+        </property>
+        <property key="min" type="integer" required="true" defaultValue="0">
+            <caption>Range Minimum</caption>
+            <category>Appearance</category>
+            <description>The minimum of the range</description>
+        </property>
+        <property key="max" type="integer" required="true" defaultValue="100">
+            <caption>Range Maximum</caption>
+            <category>Appearance</category>
+            <description>The maximum of the range</description>
+        </property>
+        <property key="step" type="integer" required="true" defaultValue="10">
+            <caption>Range Step Value</caption>
+            <category>Appearance</category>
+            <description>The step value of the range</description>
+        </property>
+        <property key="orientation" type="enumeration" defaultValue="horizontal">
+            <caption>Orientation</caption>
+            <category>Appearance</category>
+            <description>Slider orientation: horizontal or vertical</description>
+            <enumerationValues>
+                <enumerationValue key="horizontal">Horizontal</enumerationValue>
+                <enumerationValue key="vertical">Vertical</enumerationValue>
+            </enumerationValues>
+        </property>
+	</properties>
+</widget>
+
