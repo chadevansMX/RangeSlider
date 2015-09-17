@@ -3,7 +3,7 @@
     ========================
 
     @file      : RangeSlider.js
-    @version   : 0.1
+    @version   : 0.2
     @author    : Chad Evans
     @date      : Tue, 15 Sep 2015
     @copyright : 2015, Mendix B.v.
@@ -22,7 +22,7 @@ define([
     "mxui/dom",
     "dojo/dom",
     "dojo/dom-prop",
-    "dojo/dom-geometry",
+    "dojo/query",
     "dojo/dom-class",
     "dojo/dom-style",
     "dojo/dom-construct",
@@ -34,7 +34,7 @@ define([
     "RangeSlider/lib/jquery-1.11.2",
     "RangeSlider/lib/rangeslider",
     "dojo/text!RangeSlider/widget/template/RangeSlider.html"
-], function (declare, _WidgetBase, _TemplatedMixin, dom, dojoDom, dojoProp, dojoGeometry, dojoClass, dojoStyle,
+], function (declare, _WidgetBase, _TemplatedMixin, dom, dojoDom, dojoProp, dojoQuery, dojoClass, dojoStyle,
     dojoConstruct, dojoArray, dojoLang, dojoText, dojoHtml, dojoEvent, _jQuery, _rangeslider, widgetTemplate) {
     "use strict";
 
@@ -47,19 +47,24 @@ define([
 
         // DOM elements
         rangeInputNode: null,
-        $rangeInputNode: null, //jQuery node
+        inputNodes: null,
 
         // Parameters configured in the Modeler.
         valueAttr: "",
-        min: 0,
-        max: 100,
+        minAttr: "",
+        maxAttr: "",
         step: 10,
         orientation: "horizontal",
+        fillClass: "",
+        handleClass: "",
 
         // Internal variables. Non-primitives created in the prototype are shared between all widget instances.
         _handles: null,
         _contextObj: null,
         _alertDiv: null,
+        $rangeInputNode: null, //jQuery node
+        _options: null,
+        _initialized: false,
 
         // dojo.declare.constructor is called to construct the widget instance. Implement to initialize non-primitive properties.
         constructor: function () {
@@ -68,7 +73,7 @@ define([
 
         // dijit._WidgetBase.postCreate is called after constructing the widget. Implement to do extra setup work.
         postCreate: function () {
-            console.log(this.id + ".postCreate");
+            //console.log(this.id + ".postCreate");
 
             this._updateRendering();
             this._setupEvents();
@@ -76,7 +81,7 @@ define([
 
         // mxui.widget._WidgetBase.update is called when context is changed or initialized. Implement to re-render and / or fetch data.
         update: function (obj, callback) {
-            console.log(this.id + ".update");
+            //console.log(this.id + ".update");
 
             this._contextObj = obj;
             this._resetSubscriptions();
@@ -102,44 +107,65 @@ define([
         // Attach events to HTML dom elements
         _setupEvents: function () {
             dojoProp.set(this.rangeInputNode, {
-                min: this.min,
-                max: this.max,
-                step: this.step,
-                "data-orientation": this.orientation
+                step: this.step
             });
+            this._options = {
+                orientation: this.orientation,
+                polyfill: false,
+                //rangeClass: "rangeslider form-control",
+                fillClass: "rangeslider__fill " + this.fillClass,
+                handleClass: "rangeslider__handle " + this.handleClass,
+                onSlideEnd: dojoLang.hitch(this, this._onSlideEnd)
+            };
 
             dojoClass.add(this.domNode, this.orientation);
 
             this.connect(this.rangeInputNode, "change", function (e) {
                 // Function from mendix object to set an attribute.
                 this._contextObj.set(this.valueAttr, this.rangeInputNode.value);
+                this._updateHandleText(this.rangeInputNode.value);
             });
         },
 
         // Rerender the interface.
         _updateRendering: function () {
-            console.log(this.id + "._updateRendering");
-
             this.rangeInputNode.disabled = this.readOnly;
 
             if (this._contextObj !== null) {
                 dojoStyle.set(this.domNode, "display", "block");
 
-                var valu = this._contextObj.get(this.valueAttr);
+                var valu = this._contextObj.get(this.valueAttr),
+                    min = this._contextObj.get(this.minAttr),
+                    max = this._contextObj.get(this.maxAttr);
 
                 if (!this.$rangeInputNode) {
                     this.$rangeInputNode = $(this.rangeInputNode);
                 }
-                this.$rangeInputNode.rangeslider({
-                    polyfill: false,
-                    onSlideEnd: dojoLang.hitch(this, this._onSlideEnd)
-                });
+                this.$rangeInputNode.rangeslider(this._options);
+
+                if (!this._initialized) {
+                    // add some blank text to the fill and handle
+                    // needed when using label styling
+                    var fill = dojoQuery(".rangeslider__fill", this.domNode);
+                    if (fill.length > 0) {
+                        dojoHtml.set(fill[0], "&nbsp;");
+                    }
+                    var handle = dojoQuery(".rangeslider__handle", this.domNode);
+                    if (handle.length > 0) {
+                        dojoHtml.set(handle[0], "&nbsp;");
+                    }
+                }
 
                 var _this = this;
                 return setTimeout(function () {
+                    dojoProp.set(_this.rangeInputNode, {
+                        min: min,
+                        max: max
+                    });
+
                     _this.$rangeInputNode.val(valu).change();
 
-                    _this.$rangeInputNode.rangeslider("update", false)
+                    _this.$rangeInputNode.rangeslider("update", true);
                 }, 10);
             } else {
                 dojoStyle.set(this.domNode, "display", "none");
@@ -158,6 +184,8 @@ define([
         _onSlideEnd: function (position, value) {
             this._contextObj.set(this.valueAttr, this.rangeInputNode.value);
         },
+
+        _updateHandle: function () {},
 
         // Handle validations.
         _handleValidation: function (validations) {
@@ -219,13 +247,9 @@ define([
                     })
                 });
 
-                var attrHandle = this.subscribe({
-                    guid: this._contextObj.getGuid(),
-                    attr: this.valueAttr,
-                    callback: dojoLang.hitch(this, function (guid, attr, attrValue) {
-                        this._updateRendering();
-                    })
-                });
+                var attrHandle = this._subscribeAttr(this.valueAttr);
+                var minAttrHandle = this._subscribeAttr(this.minAttr);
+                var maxAttrHandle = this._subscribeAttr(this.maxAttr);
 
                 var validationHandle = this.subscribe({
                     guid: this._contextObj.getGuid(),
@@ -233,8 +257,18 @@ define([
                     callback: dojoLang.hitch(this, this._handleValidation)
                 });
 
-                this._handles = [objectHandle, attrHandle, validationHandle];
+                this._handles = [objectHandle, attrHandle, minAttrHandle, maxAttrHandle, validationHandle];
             }
+        },
+
+        _subscribeAttr: function (entityAttr) {
+            return this.subscribe({
+                guid: this._contextObj.getGuid(),
+                attr: entityAttr,
+                callback: dojoLang.hitch(this, function (guid, attr, attrValue) {
+                    this._updateRendering();
+                })
+            });
         }
     });
 });

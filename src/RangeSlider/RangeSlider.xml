@@ -1,29 +1,37 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <widget id="RangeSlider.widget.RangeSlider" needsEntityContext="true" xmlns="http://www.mendix.com/widget/1.0/">
-  <name>RangeSlider</name>
-  <description>A Range Slider input control for Mendix.</description>
+    <name>RangeSlider</name>
+    <description>A Range Slider input control for Mendix.</description>
 
-  <icon></icon>
+    <icon>iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAABmJLR0QAAAAAAAD5Q7t/AAAACXBIWXMAAAsSAAALEgHS3X78AAADD0lEQVRIx7WVP0srTRSHn5kdN0rE7CaoBEFMYaVFCgXFbyD4MQRBsbO/XyN+AMtUdtHCQhA7MYIgEkELMQhrNELcP3OL605mE71eeHkHDtllZn/POWfOORE7Ozua/3Gpnw5o3ecLIf47wBa0n+13G/QTVA1+rLX+K0QIgdb6nyHKFrUhSZJkAFJKyuUyhUKBMAxpt9u8vb0NwYcAtngqbL/n83nW19dZXV1lfHw8E1mr1aLRaHB5eYmUcigyALG5ualt8dS01szPz7O7u8vExMRf83x2dsbBwQFRFA1FosIwHBKP45hKpcLe3h65XC4jFscxUsqMyMrKCo7jsL+/jxDC7Gmt/6QoFU0NYHt724hrrQmCgNfXV7M/NjZGsVjEdV0AlpeXubq64uTkJBOFtIVTW1tbY2ZmxnjYbrfpdDporZFSIqWk1+vx+PhIr9cz5zY2Nhi8U9VqtTLpSZKEarVqPup2u4RhiFJf92QQBExPTwNQKpWYnJzk+vralLO6vb3NEIUQzM3NGYGPjw9GBsQHZ0sYhoyMjABQKBRot9smRSqt8TRvQgg8z8vUtvoBYDfjYMWpcrk81GRBEJiDrusSf5bfdwDHcczz+/s7+XzeOKsqlQpxHBNFkbGbmxtmZ2cByLk5PgY9RpAWqZQyA3h+fmZqasoAZOq1Hebx8XHfO+Xgui5KqS/Nzbnm7N3dHff399kUjY6OkiQJURQRhiFxHHNxcUGz2WRxcfETopDWfAKBFAIh+82mtaZer2fSI4RAlkolfN/H8zzz63ketVqNl5eXzGU7jvNpMiMO0Gg0eHh4wPd9isUipVKJYrGIU61Wf9n5j6KIOI7pdDqcnp6ysLCA7/t8t6Iool6vc3h4mJkIqZaztLT0a3Dm2xVxdHTE09OTiTCt706nw/n5ObVajWazieM4psvteSS2tra0PeRss0c3QC6Xw/M8oiii2+1aKRsWN40mhDCNZuc7bfX+xfZ7xHEclFKmRL8TN4C0nm2AlNJEMAhO9237SjwDSCG2ePov9RUgPfedcLp+AxLl+r+bZ1ziAAAAAElFTkSuQmCC</icon>
 
-  <properties>
+    <properties>
         <property key="valueAttr" type="attribute">
             <caption>Value Attribute</caption>
             <category>Data Source</category>
             <description>The selected value on the range.</description>
             <attributeTypes>
-                <attributeType name="Integer"/>
-                <attributeType name="Long"/>
+                <attributeType name="Integer" />
+                <attributeType name="Long" />
             </attributeTypes>
         </property>
-        <property key="min" type="integer" required="true" defaultValue="0">
-            <caption>Range Minimum</caption>
-            <category>Appearance</category>
-            <description>The minimum of the range</description>
+        <property key="minAttr" type="attribute">
+            <caption>Min Attribute</caption>
+            <category>Data Source</category>
+            <description>The min for the range.</description>
+            <attributeTypes>
+                <attributeType name="Integer" />
+                <attributeType name="Long" />
+            </attributeTypes>
         </property>
-        <property key="max" type="integer" required="true" defaultValue="100">
-            <caption>Range Maximum</caption>
-            <category>Appearance</category>
-            <description>The maximum of the range</description>
+        <property key="maxAttr" type="attribute">
+            <caption>Max Attribute</caption>
+            <category>Data Source</category>
+            <description>The max for the range.</description>
+            <attributeTypes>
+                <attributeType name="Integer" />
+                <attributeType name="Long" />
+            </attributeTypes>
         </property>
         <property key="step" type="integer" required="true" defaultValue="10">
             <caption>Range Step Value</caption>
@@ -39,6 +47,16 @@
                 <enumerationValue key="vertical">Vertical</enumerationValue>
             </enumerationValues>
         </property>
-	</properties>
+        <property key="fillClass" type="string" required="false" defaultValue="label label-info">
+            <caption>Fill Class</caption>
+            <category>Appearance</category>
+            <description>The CSS class for the fill</description>
+        </property>
+        <property key="handleClass" type="string" required="false" defaultValue="label label-primary">
+            <caption>Handle Class</caption>
+            <category>Appearance</category>
+            <description>The CSS class for the handle</description>
+        </property>
+    </properties>
 </widget>
 
