@@ -3,9 +3,9 @@
     ========================
 
     @file      : RangeSlider.js
-    @version   : 0.2
+    @version   : 0.3
     @author    : Chad Evans
-    @date      : Tue, 15 Sep 2015
+    @date      : 21 Sep 2015
     @copyright : 2015, Mendix B.v.
     @license   : Apache v2
 
@@ -46,8 +46,8 @@ define([
         templateString: widgetTemplate,
 
         // DOM elements
+        rangeSliderNode: null,
         rangeInputNode: null,
-        inputNodes: null,
 
         // Parameters configured in the Modeler.
         valueAttr: "",
@@ -118,7 +118,7 @@ define([
                 onSlideEnd: dojoLang.hitch(this, this._onSlideEnd)
             };
 
-            dojoClass.add(this.domNode, this.orientation);
+            dojoClass.add(this.rangeSliderNode, this.orientation);
 
             this.connect(this.rangeInputNode, "change", function (e) {
                 // Function from mendix object to set an attribute.
@@ -146,11 +146,11 @@ define([
                 if (!this._initialized) {
                     // add some blank text to the fill and handle
                     // needed when using label styling
-                    var fill = dojoQuery(".rangeslider__fill", this.domNode);
+                    var fill = dojoQuery(".rangeslider__fill", this.rangeSliderNode);
                     if (fill.length > 0) {
                         dojoHtml.set(fill[0], "&nbsp;");
                     }
-                    var handle = dojoQuery(".rangeslider__handle", this.domNode);
+                    var handle = dojoQuery(".rangeslider__handle", this.rangeSliderNode);
                     if (handle.length > 0) {
                         dojoHtml.set(handle[0], "&nbsp;");
                     }
@@ -220,7 +220,7 @@ define([
                 "class": "alert alert-danger",
                 "innerHTML": message
             });
-            dojoConstruct.place(this.domNode, this._alertDiv);
+            dojoConstruct.place(this._alertDiv, this.domNode);
         },
 
         // Add a validation.
