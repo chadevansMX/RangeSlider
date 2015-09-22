@@ -3,9 +3,9 @@
     ========================
 
     @file      : RangeSlider.js
-    @version   : 0.3
+    @version   : 1.0
     @author    : Chad Evans
-    @date      : 21 Sep 2015
+    @date      : 22 Sep 2015
     @copyright : 2015, Mendix B.v.
     @license   : Apache v2
 
@@ -90,20 +90,6 @@ define([
             callback();
         },
 
-        // mxui.widget._WidgetBase.enable is called when the widget should enable editing. Implement to enable editing if widget is input widget.
-        enable: function () {},
-
-        // mxui.widget._WidgetBase.enable is called when the widget should disable editing. Implement to disable editing if widget is input widget.
-        disable: function () {},
-
-        // mxui.widget._WidgetBase.resize is called when the page's layout is recalculated. Implement to do sizing calculations. Prefer using CSS instead.
-        resize: function (box) {},
-
-        // mxui.widget._WidgetBase.uninitialize is called when the widget is destroyed. Implement to do special tear-down work.
-        uninitialize: function () {
-            // Clean up listeners, helper objects, etc. There is no need to remove listeners added with this.connect / this.subscribe / this.own.
-        },
-
         // Attach events to HTML dom elements
         _setupEvents: function () {
             dojoProp.set(this.rangeInputNode, {
@@ -112,7 +98,6 @@ define([
             this._options = {
                 orientation: this.orientation,
                 polyfill: false,
-                //rangeClass: "rangeslider form-control",
                 fillClass: "rangeslider__fill " + this.fillClass,
                 handleClass: "rangeslider__handle " + this.handleClass,
                 onSlideEnd: dojoLang.hitch(this, this._onSlideEnd)
@@ -123,7 +108,6 @@ define([
             this.connect(this.rangeInputNode, "change", function (e) {
                 // Function from mendix object to set an attribute.
                 this._contextObj.set(this.valueAttr, this.rangeInputNode.value);
-                this._updateHandleText(this.rangeInputNode.value);
             });
         },
 
@@ -185,11 +169,9 @@ define([
             this._contextObj.set(this.valueAttr, this.rangeInputNode.value);
         },
 
-        _updateHandle: function () {},
-
         // Handle validations.
         _handleValidation: function (validations) {
-            console.log(this.id + "._handleValidation");
+            //console.log(this.id + "._handleValidation");
 
             this._clearValidations();
 

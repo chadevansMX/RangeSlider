@@ -35,19 +35,9 @@ You can use default Bootstrap styling by selecting the appropriate classes for t
 .rangeslider__fill {
   background: #00ff00;
 }
-.rangeslider--horizontal .rangeslider__handle {
-	top: -12px;
-  height: 40px;
-}
-.rangeslider--vertical .rangeslider__handle {
-	left: -9px;
-  width: 40px;
-}
 .rangeslider__handle {
   background: white;
   border: 1px solid #ccc;
-  width: 40px;
-  height: 40px;
   background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJvYmplY3RCb3VuZGluZ0JveCIgeDE9IjAuNSIgeTE9IjAuMCIgeDI9IjAuNSIgeTI9IjEuMCI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2ZmZmZmZiIgc3RvcC1vcGFjaXR5PSIwLjAiLz48c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiMwMDAwMDAiIHN0b3Atb3BhY2l0eT0iMC4xIi8+PC9saW5lYXJHcmFkaWVudD48L2RlZnM+PHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNncmFkKSIgLz48L3N2Zz4g');
   background-size: 100%;
   background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, rgba(255, 255, 255, 0)), color-stop(100%, rgba(0, 0, 0, 0.1)));
@@ -60,6 +50,16 @@ You can use default Bootstrap styling by selecting the appropriate classes for t
   -moz-border-radius: 50%;
   -webkit-border-radius: 50%;
   border-radius: 50%;
+}
+.rangeslider-wrapper .rangeslider--horizontal .rangeslider__handle {
+	top: -12px;
+  width: 40px;
+  height: 40px;
+}
+.rangeslider-wrapper .rangeslider--vertical .rangeslider__handle {
+	left: -9px;
+  width: 40px;
+  height: 40px;
 }
 .rangeslider__handle:after {
   content: "";
