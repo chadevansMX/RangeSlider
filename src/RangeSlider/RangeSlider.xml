@@ -13,6 +13,7 @@
             <attributeTypes>
                 <attributeType name="Integer" />
                 <attributeType name="Long" />
+                <attributeType name="Float" />
             </attributeTypes>
         </property>
         <property key="minAttr" type="attribute">
@@ -22,6 +23,7 @@
             <attributeTypes>
                 <attributeType name="Integer" />
                 <attributeType name="Long" />
+                <attributeType name="Float" />
             </attributeTypes>
         </property>
         <property key="maxAttr" type="attribute">
@@ -31,12 +33,23 @@
             <attributeTypes>
                 <attributeType name="Integer" />
                 <attributeType name="Long" />
+                <attributeType name="Float" />
             </attributeTypes>
         </property>
         <property key="step" type="integer" required="true" defaultValue="10">
             <caption>Range Step Value</caption>
             <category>Appearance</category>
-            <description>The step value of the range</description>
+            <description>The step value of the range, used if attribute is not set</description>
+        </property>
+        <property key="stepAttr" type="attribute" required="false">
+            <caption>Range Step Attribute</caption>
+            <category>Data Source</category>
+            <description>The step value of the range from an attribute, takes precedence over range step value.</description>
+            <attributeTypes>
+                <attributeType name="Integer" />
+                <attributeType name="Long" />
+                <attributeType name="Float" />
+            </attributeTypes>
         </property>
         <property key="orientation" type="enumeration" defaultValue="horizontal">
             <caption>Orientation</caption>
@@ -56,6 +69,12 @@
             <caption>Handle Class</caption>
             <category>Appearance</category>
             <description>The CSS class for the handle</description>
+        </property>
+        <property key="onSlideEndMF" type="microflow" required="false">
+            <caption>On Slide End</caption>
+            <category>Behavior</category>
+            <description>Called when the range slider has ended the slide.</description>
+            <returnType type="Void" />
         </property>
     </properties>
 </widget>

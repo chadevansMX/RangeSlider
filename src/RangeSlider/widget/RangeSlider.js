@@ -3,9 +3,9 @@
     ========================
 
     @file      : RangeSlider.js
-    @version   : 1.0
+    @version   : 1.4
     @author    : Chad Evans
-    @date      : 22 Sep 2015
+    @date      : 14 Oct 2015
     @copyright : 2015, Mendix B.v.
     @license   : Apache v2
 
@@ -54,9 +54,11 @@ define([
         minAttr: "",
         maxAttr: "",
         step: 10,
+        stepAttr: "",
         orientation: "horizontal",
         fillClass: "",
         handleClass: "",
+        onSlideEndMF: "",
 
         // Internal variables. Non-primitives created in the prototype are shared between all widget instances.
         _handles: null,
@@ -92,9 +94,11 @@ define([
 
         // Attach events to HTML dom elements
         _setupEvents: function () {
-            dojoProp.set(this.rangeInputNode, {
-                step: this.step
-            });
+            if (!this.stepAttr || this.stepAttr === "") {
+                dojoProp.set(this.rangeInputNode, {
+                    step: this.step
+                });
+            }
             this._options = {
                 orientation: this.orientation,
                 polyfill: false,
@@ -117,6 +121,12 @@ define([
 
             if (this._contextObj !== null) {
                 dojoStyle.set(this.domNode, "display", "block");
+
+                if (this.stepAttr && this.stepAttr !== "") {
+                    dojoProp.set(this.rangeInputNode, {
+                        step: this._contextObj.get(this.stepAttr)
+                    });
+                }
 
                 var valu = this._contextObj.get(this.valueAttr),
                     min = this._contextObj.get(this.minAttr),
@@ -167,6 +177,22 @@ define([
 
         _onSlideEnd: function (position, value) {
             this._contextObj.set(this.valueAttr, this.rangeInputNode.value);
+
+            if (this.onSlideEndMF) {
+                mx.data.action({
+                    params: {
+                        applyto: "selection",
+                        actionname: this.onSlideEndMF,
+                        guids: [this._contextObj.getGuid()]
+                    },
+                    callback: function (obj) {
+                        //TODO what to do when all is ok!
+                    },
+                    error: dojoLang.hitch(this, function (error) {
+                        console.log(this.id + ": An error occurred while executing microflow: " + error.description);
+                    })
+                }, this);
+            }
         },
 
         // Handle validations.
@@ -232,6 +258,7 @@ define([
                 var attrHandle = this._subscribeAttr(this.valueAttr);
                 var minAttrHandle = this._subscribeAttr(this.minAttr);
                 var maxAttrHandle = this._subscribeAttr(this.maxAttr);
+                var stepAttrHandle = this._subscribeAttr(this.stepAttr);
 
                 var validationHandle = this.subscribe({
                     guid: this._contextObj.getGuid(),
@@ -239,7 +266,7 @@ define([
                     callback: dojoLang.hitch(this, this._handleValidation)
                 });
 
-                this._handles = [objectHandle, attrHandle, minAttrHandle, maxAttrHandle, validationHandle];
+                this._handles = [objectHandle, attrHandle, minAttrHandle, maxAttrHandle, stepAttrHandle, validationHandle];
             }
         },
 
